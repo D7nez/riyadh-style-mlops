@@ -1,0 +1,13 @@
+# Optional development override. Editable install loads mounted source without rebuilds.
+services:
+  api:
+    command: ["uvicorn", "styleops.api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    volumes:
+      - ./src:/app/src
+      - ./prompts:/app/prompts
+      - ./ui:/app/ui
+  benchmark:
+    volumes:
+      - ./src:/app/src
+      - ./configs:/app/configs
+      - ./evaluation:/app/evaluation

@@ -1,0 +1,57 @@
+services:
+  mlflow:
+    image: riyadh-style-mlops:local
+    build:
+      context: .
+      args:
+        INSTALL_SEMANTIC: ${INSTALL_SEMANTIC:-false}
+    command: ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000", "--backend-store-uri", "sqlite:////app/mlflow/mlflow.db", "--allowed-hosts", "mlflow:5000,localhost:5000,127.0.0.1:5000", "--serve-artifacts", "--artifacts-destination", "/app/mlflow/artifacts"]
+    ports: ["127.0.0.1:5000:5000"]
+    volumes: ["mlflow_data:/app/mlflow"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  api:
+    image: riyadh-style-mlops:local
+    build:
+      context: .
+      args:
+        INSTALL_SEMANTIC: ${INSTALL_SEMANTIC:-false}
+    env_file: .env
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+    ports: ["127.0.0.1:8000:8000"]
+    volumes: ["model_cache:/home/app/.cache", "retrieval_cache:/app/.cache"]
+    depends_on:
+      mlflow: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+      start_period: 120s
+    restart: unless-stopped
+  benchmark:
+    profiles: ["tools"]
+    image: riyadh-style-mlops:local
+    build:
+      context: .
+      args:
+        INSTALL_SEMANTIC: ${INSTALL_SEMANTIC:-false}
+    env_file: .env
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+    command: ["styleops", "compare"]
+    volumes: ["model_cache:/home/app/.cache", "retrieval_cache:/app/.cache", "reports:/app/reports"]
+    depends_on:
+      mlflow: {condition: service_healthy}
+volumes:
+  mlflow_data:
+  model_cache:
+  retrieval_cache:
+  reports:

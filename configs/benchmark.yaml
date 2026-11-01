@@ -1,0 +1,6 @@
+# Legacy full-pipeline benchmark, Groq only. Use compare.yaml for cross-provider comparison.
+models:
+  - openai/gpt-oss-20b
+  - openai/gpt-oss-120b
+repetitions: 2
+temperature: 0.6

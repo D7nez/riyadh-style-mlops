@@ -1,0 +1,3 @@
+{"id": "parks", "text": "تعتزم المدينة تطوير 12 حديقة وزراعة 3000 شجرة لتحسين جودة الحياة.", "text_type": "فقرة قصيرة", "required_phrases": ["12", "3000"], "forbidden_phrases": ["أكثر من 3000", "شركاء دوليين"]}
+{"id": "approximate", "text": "تخطط البلدية لزراعة نحو 3000 شجرة خلال العام المقبل.", "text_type": "فقرة قصيرة", "required_phrases": ["نحو", "3000"], "forbidden_phrases": ["تمت زراعة"]}
+{"id": "minimum", "text": "يشترط البرنامج مشاركة 20 متطوعًا على الأقل في كل حملة.", "text_type": "تقرير", "required_phrases": ["20", "على الأقل"], "forbidden_phrases": []}

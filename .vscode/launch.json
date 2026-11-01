@@ -1,0 +1,70 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug API (local)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+        "styleops.api:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000"
+      ],
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      },
+      "justMyCode": true
+    },
+    {
+      "name": "Debug benchmark",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "styleops.cli",
+      "args": [
+        "benchmark"
+      ],
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      },
+      "justMyCode": true
+    },
+    {
+      "name": "Debug factual regression tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": [
+        "tests/test_quality.py",
+        "-q"
+      ],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "LANGSMITH_TRACING": "false"
+      },
+      "justMyCode": true
+    },
+    {
+      "name": "Debug controlled quality comparison",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "styleops.cli",
+      "args": [
+        "compare",
+        "--config",
+        "configs/quality-v2.yaml",
+        "--cases",
+        "evaluation/regression.jsonl"
+      ],
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      },
+      "justMyCode": true
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+experiment: riyadh-style-quality-ab
+style_prompt: prompts/style_v1.txt
+repetitions: 2
+temperature: 0.6
+max_tokens: 1800
+warmup: true
+preflight: true
+hardware_label: NVIDIA GeForce RTX 3050 8GB (user-reported)
+candidates:
+  - {name: groq-gpt-oss-120b, backend: groq, model: openai/gpt-oss-120b}
+  - {name: ollama-qwen25, backend: ollama, model: 'qwen2.5:latest'}
